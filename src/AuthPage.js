@@ -1,9 +1,10 @@
 import { useState } from "react";
 import {auth} from "./backend/firebase"
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import "./Styles/Auth.css"
 
 function AuthPage() {
+    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
     const [confirmPass, setConfirmPass] = useState("");
@@ -16,6 +17,19 @@ function AuthPage() {
         .then((userCredential) => {
           // Signed in 
           const user = userCredential.user;
+          updateProfile(user, {
+            displayName: username
+          })
+          .then(() => {
+            console.log("Profile updated")
+            // Profile updated!
+            // ...
+          })
+          .catch((error) => {
+            console.log(error)
+            // An error occurred
+            // ...
+          });
           console.log(user)
           // ...
         })
@@ -52,7 +66,9 @@ function AuthPage() {
         <div className="signup">
             <form>
               <label htmlFor="chk" aria-hidden="true" className="authlabel"> Sign Up </label>
-              <input type="text" name="user" placeholder="User name" />
+              <input type="text" name="user" placeholder="User name" 
+              onChange= {(e) => setUsername(e.target.value)}
+              />
               <input type="email" name="email" placeholder="Email" 
               onChange= {(e) => setEmail(e.target.value)}
               />

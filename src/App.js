@@ -1,7 +1,7 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged} from "firebase/auth";
-import Chat from "./Chat"
+import MainDisplay from "./MainDisplay"
 import AuthPage from './AuthPage';
 import {auth} from "./backend/firebase";
 
@@ -20,10 +20,14 @@ function App() {
 
   return (
     <section>
-    {currentUser ? <Chat/> : <AuthPage/>} 
+      {currentUser ? <MainDisplay user={currentUser}/> : <AuthPage/>}
     </section>
       
   );
 }
 
 export default App;
+
+/**
+ * 
+ */

@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react"
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { firestore } from "../backend/firebase";
-import "../Styles/Chat.css"
+import { auth, firestore } from "../backend/firebase";
+import "../Styles/MainDisplay.css"
 
 const SendMsg = ({scroll}) => {
     const [input, setInput] = useState("");
+    const user = auth.currentUser;
 
     const submit = async (e) => {
         setInput("")
         e.preventDefault();
         await addDoc(collection(firestore, "messages"), {
+            user: user.displayName,
             text: input,
             timestamp: serverTimestamp()
         })
