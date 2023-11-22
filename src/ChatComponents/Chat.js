@@ -1,12 +1,15 @@
-import { useEffect, useRef,useState } from "react";
+import { useContext, useEffect, useRef,useState } from "react";
 import "../Styles/MainDisplay.css"
 import SendMsg from "./SendMsg";
 import Message from "./Message"
+import {MainContext} from "../Contexts/MainDisplayProvider";
 
 const Chat = () => {
     const scroll = useRef();
 
     const [msgs, setMsgs] = useState([]);
+
+    const selectedChat = useContext(MainContext);
 
   // useEffect(() => {
   //   console.log(chatroom)

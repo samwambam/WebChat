@@ -1,5 +1,8 @@
+import { useContext } from "react";
+import {MainDispatchContext} from "../Contexts/MainDisplayProvider";
 
 const Sidebar = () => {
+    const setUserDetails = useContext(MainDispatchContext);
 
     // const signout = () => {
     //     signOut(auth).then(() => {
@@ -8,6 +11,11 @@ const Sidebar = () => {
     //         // An error happened.
     //       });
     // }
+
+    const handleClick = (e) => {
+        e.preventDefault();
+        setUserDetails("Hey");
+    }
 
  return (
     <div>
