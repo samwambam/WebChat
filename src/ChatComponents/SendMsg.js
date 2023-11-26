@@ -19,8 +19,8 @@ const SendMsg = ({scroll}) => {
     }
     
  return(
-     <div>
-         <form onSubmit={submit} className="sendcomponent">
+     <div className="send-component">
+         <form onSubmit={submit}>
              <input
                  type="text"
                  name="messagetext"

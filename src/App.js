@@ -26,9 +26,9 @@ function App() {
     const userRef = doc(firestore, "users", user.uid);
     
     try{
-      const doc = await getDoc(userRef);
+      const docSnapshot = await getDoc(userRef);
 
-      if (!doc.exists()){
+      if (!docSnapshot.exists()){
         await setDoc(userRef, {
           username: user.displayName,
           email: user.email
@@ -40,9 +40,10 @@ function App() {
     }
   }
 
+  //TODO: error messages
   return (
     <section>
-      {currentUser ? <MainDisplay user={currentUser}/> : <AuthPage/>}
+      {currentUser ? <MainDisplay/> : <AuthPage/>}
     </section>
       
   );

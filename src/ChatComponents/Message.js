@@ -7,9 +7,9 @@ const Message = ({ message }) => {
     return (
         <div className="message">
             <div 
-                className="userpic" style= {{backgroundImage: `url(${pic})`}}> </div>
+                className="user-pic" style= {{backgroundImage: `url(${pic})`}}> </div>
             <div className="content"> 
-                <p className="user_name"> Person </p>
+                <p className="user-name"> Person </p>
                 <p className=""> {message.text} </p>
             </div>
         </div>

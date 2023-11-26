@@ -3,7 +3,7 @@ import Chat from "./ChatComponents/Chat";
 import "./Styles/MainDisplay.css"
 import {MainDisplayProvider} from './Contexts/MainDisplayProvider';
 
-const MainDisplay = ({user}) => {
+const MainDisplay = () => {
   return (
     <MainDisplayProvider>
       <div className="whole">
@@ -11,10 +11,12 @@ const MainDisplay = ({user}) => {
           <Sidebar />
         </div>
 
-        <Chat />
+        <div className='chat-content'>
+          <Chat />
+        </div>
+
       </div>
     </MainDisplayProvider>
-
   );
 };
 export default MainDisplay;

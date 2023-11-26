@@ -1,20 +1,13 @@
 .whole {
     width: 100vw;
-    margin-left: 1%;
-    display: inline-flex;
 }
 
 .sidebar {
-    width: 15%;
-}
-
-.content {
     display: inline-block;
 }
 
-.chats {
-    width: 80vw;
-    height: 80vh;
+.chat-content {
+    display: inline-block;
 }
 
 .message {
@@ -22,7 +15,7 @@
     display: flex;
 }
 
-.userpic {
+.user-pic {
     width: 50px;
     height: 50px;
     margin-right: 10px;
@@ -32,7 +25,7 @@
     border-radius: 50%;
 }
 
-.user_name {
+.user-name {
     font-weight: bold;
 }
 
@@ -40,7 +33,7 @@ span {
     color: aliceblue;
 }
 
-.sendcomponent {
+.send-component {
     width: 80vw;
     height: 80px;
     display: flex;
@@ -51,7 +44,7 @@ span {
     border-top: 2px solid #EEE;
 }
 
-.sendcomponent input{
+.send-component input{
     height: 40%;
     width: 85%;
     padding: 0.5rem 0.8rem 0.5rem 0.8rem;
@@ -62,7 +55,7 @@ span {
     font-size:medium;
 }
 
-.sendcomponent button{
+.send-component button{
     position:absolute;
     height: 40px;
     width: 50px;
@@ -74,7 +67,7 @@ span {
     color: aliceblue;
 }
 
-.sendcomponent button:hover{
+.send-component button:hover{
     cursor: pointer;
     border-color: aquamarine;
 }

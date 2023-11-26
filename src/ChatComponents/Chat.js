@@ -8,7 +8,7 @@ const Chat = () => {
     const scroll = useRef();
 
     const [msgs, setMsgs] = useState([]);
-
+  //TODO: grab based on selected Chat
     const selectedChat = useContext(MainContext);
 
   // useEffect(() => {
@@ -26,7 +26,7 @@ const Chat = () => {
   // }, []);
 
     return (
-      <div className="chats">
+      <div>
         {msgs.map((msg) => (
           <Message key={msg.id} message={msg} />
         ))}
