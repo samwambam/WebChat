@@ -26,12 +26,17 @@ const Chat = () => {
   // }, []);
 
     return (
-      <div>
-        {msgs.map((msg) => (
-          <Message key={msg.id} message={msg} />
-        ))}
-        <SendMsg scroll={scroll} />
+      <div className="chat-content">
+        <div className="messages">
+          {msgs.map((msg) => (
+            <Message key={msg.id} message={msg} />
+          ))}
+        </div>
+
+        <div className="send-component">
+          <SendMsg scroll={scroll} />
         <span ref={scroll}></span>
+        </div>
       </div>
     );
 }

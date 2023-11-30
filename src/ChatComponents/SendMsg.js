@@ -18,22 +18,20 @@ const SendMsg = ({scroll}) => {
         scroll.current.scrollIntoView({behavior: "smooth"})
     }
     
- return(
-     <div className="send-component">
-         <form onSubmit={submit}>
-             <input
-                 type="text"
-                 name="messagetext"
-                 placeholder="Type your message here"
-                 required
-                 value={input}
-                 onChange={(e) => setInput(e.target.value)}
-             />
+    return (
+        <form onSubmit={submit} className="send-form">
+            <input
+                type="text"
+                name="messagetext"
+                placeholder="Type your message here"
+                required
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+            />
 
-             <button type="submit"> Send </button>
-         </form>
-     </div>
- )
+            <button type="submit"> Send </button>
+        </form>
+    )
 }
 
 export  default SendMsg

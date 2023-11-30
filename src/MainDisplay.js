@@ -11,7 +11,7 @@ const MainDisplay = () => {
           <Sidebar />
         </div>
 
-        <div className='chat-content'>
+        <div className='chat-component'>
           <Chat />
         </div>
 
