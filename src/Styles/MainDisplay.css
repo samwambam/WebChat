@@ -35,10 +35,6 @@
     margin-bottom: 3px;
 }
 
-span {
-    color: aliceblue;
-}
-
 .chat-content {
     min-height: 100vh;
 }

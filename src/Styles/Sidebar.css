@@ -1,0 +1,159 @@
+.sidebar-whole {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    column-gap: 2px;
+    height: 100%;
+}
+
+.narrow {
+    height: 100%;
+    width: 50px;
+}
+
+ul {
+    margin: 0;
+    padding:0;
+}
+
+li {
+    list-style-type: none;
+    margin: 0 0 2px 0;
+}
+
+.narrow button {
+    display: flex;
+    width: 50px;
+    height: 50px;
+    align-items: center;
+    justify-content: center;
+    border-color: #EEE;
+    border-style: solid;
+    background-color: transparent;
+    color: white;
+
+}
+
+.narrow button:hover{
+    cursor: pointer;
+    border-color: #fad9d7;
+}
+
+.sidebar-main {
+    background-color: #292554;
+}
+
+h2 {
+    margin: 2px 0 10px 0;
+    padding: 0;
+    color: white;
+}
+
+/*-------------------------------*/
+
+.add-friend-div input{
+    margin: 0 0 5px 0;
+    width: 90%;
+    height: 15px;
+    padding: 0.3rem;
+    border: 0;
+    border-radius: 5px;
+
+}
+
+.add-friend-div button {
+    margin-bottom: 5px;
+    padding: 0.4rem;
+    border-color: #EEE;
+    border-style: solid;
+    border-radius: 5px;
+    color:rgb(74, 85, 96);
+}
+
+.add-friend-div button:hover{
+    cursor: pointer;
+    border-color: #fad9d7;
+}
+
+.friend-requests li {
+    padding: 0.3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.accept-btn {
+    padding: 0.2rem;
+    border-color: #EEE;
+    border-style: solid;
+    border-radius: 5px;
+    color:rgb(74, 85, 96);
+}
+
+.accept-btn:hover{
+    cursor: pointer;
+    border-color: lime;
+}
+
+.reject-btn {
+    padding: 0.2rem;
+    border-color: #EEE;
+    border-style: solid;
+    border-radius: 5px;
+    color:rgb(74, 85, 96);
+}
+
+.reject-btn:hover{
+    cursor: pointer;
+    border-color: red;
+}
+
+span {
+    color: black;
+}
+
+.list{
+    display: flex;
+    align-items: center;
+    height: 50px;
+    margin: 0 0 2px 0;
+    color: #EEE;
+    background-color: #2d2554;
+}
+
+.list:hover {
+    cursor: pointer;
+    background-color: #312554;
+}
+
+/*-------------------------------*/
+
+.new-chat-div button {
+    margin-bottom: 5px;
+    padding: 0.4rem;
+    border-color: #EEE;
+    border-style: solid;
+    border-radius: 5px;
+    color: rgb(74, 85, 96);
+}
+
+.new-chat-div button:hover {
+    cursor: pointer;
+    border-color: #fad9d7;
+}
+
+.new-chat-div .list {
+    justify-content: space-between;
+}
+
+.chkbox {
+    height: 1rem;
+    width: 1rem;
+    border: 0.1rem solid gray;
+}
+
+.chkbox:checked {
+    accent-color: purple;
+    border-color: purple;
+}
+
+/*-------------------------------*/

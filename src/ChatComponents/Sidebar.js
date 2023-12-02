@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { MainDispatchContext } from "../Contexts/MainDisplayProvider";
 import { auth, firestore } from "../backend/firebase";
 import { collection, query, doc, where, getDoc, getDocs, updateDoc, addDoc } from "firebase/firestore";
+import "../Styles/Sidebar.css";
+
 
 //TODO: CSS 
 
@@ -73,13 +75,16 @@ const AddFriendComponent = () => {
                 <input type="email" placeholder="Enter friend's email" onChange={(e) => setFriendEmail(e.target.value)} />
                 <button onClick={handleAddFriend}> Send Friend Request </button>
             </div>
-            <div>
+            <div className="friend-requests">
             <h2> Friend Requests</h2>
             <ul>
                 {requests.map((request) => (
                     <li key={request.key}>
-                        <span> Friend request from {request.name}</span>
-                        <button> Accept </button>
+                        <span>{request.name}</span>
+                        <div>
+                            <button className="accept-btn"> Accept </button>
+                            <button className="reject-btn"> Ignore </button>
+                        </div>
                     </li>
                 ))}
             </ul>
@@ -120,7 +125,7 @@ const ChatListComponent = () => {
         <div className="chat-list-div">
             <ul>
                 {chats.map((chat) => (
-                    <li key={chat.id} onClick={setChat}>
+                    <li key={chat.id} onClick={setChat} className="list">
                         {chat.name}
                     </li>
                 ))}
@@ -189,14 +194,14 @@ const MakeNewGroupChatComponent = () => {
     return (
         <div className="new-chat-div">
             <h2> Create new group chat</h2>
+            <button onClick={createGroupChat}> Create </button>
             <ul>
                 {friends.map((friend) => (
-                    <li key={friend} onClick={addToChat}>
+                    <li key={friend} onClick={addToChat} className="list">
                         {friend} {selected.includes(friend) ? "(Selected)" : ""}
                     </li>
                 ))}
             </ul>
-            <button onClick={createGroupChat}> Create </button>
         </div>
     )
 }
@@ -218,15 +223,15 @@ const Sidebar = () => {
         e.preventDefault();
 
         if (e.target.name === "friends") {
-            setShowAddFriends(true);
+            setShowAddFriends(!showAddFriends);
             setShowChats(false);
             setShowMakeNewChat(false);
         }else if (e.target.name === "chats"){
-            setShowChats(true);
+            setShowChats(!showChats);
             setShowAddFriends(false);
             setShowMakeNewChat(false);
         }else if (e.target.name === "newchat"){
-            setShowMakeNewChat(true);
+            setShowMakeNewChat(!showMakeNewChat);
             setShowAddFriends(false);
             setShowChats(false);
         }
@@ -243,9 +248,9 @@ const Sidebar = () => {
                 </ul>
             </div>
             <div className="sidebar-main">
-                { showAddFriends && <AddFriendComponent/> }
-                { showChats && <ChatListComponent/> }
-                { showMakeNewChat && <MakeNewGroupChatComponent /> }
+                {showAddFriends && <AddFriendComponent />}
+                {showChats && <ChatListComponent />}
+                {showMakeNewChat && <MakeNewGroupChatComponent />}
             </div>
             
         </div>
