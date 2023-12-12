@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { MainDispatchContext } from "../Contexts/MainDisplayProvider";
 import { auth, firestore } from "../backend/firebase";
-import { collection, query, doc, where, getDoc, getDocs, updateDoc, addDoc } from "firebase/firestore";
+import { collection, query, doc, where, getDoc, getDocs, updateDoc, addDoc, deleteField, onSnapshot } from "firebase/firestore";
 import "../Styles/Sidebar.css";
 
 
@@ -10,27 +10,29 @@ import "../Styles/Sidebar.css";
 const AddFriendComponent = () => {
     const [friendEmail, setFriendEmail] = useState("");
     const [requests, setRequests] = useState([]);
-
+    
     useEffect(() => {
         const user = auth.currentUser;
         const fetchDoc = async () => {
             try {
-                const docSnapshot = await getDoc(doc(firestore, "users", user.uid));
-                if (docSnapshot.exists()) {
-                    const dictionary = docSnapshot.data().friendRequestsReceived
-
-                    if (dictionary) {
-                        const arr = [];
-                        Object.keys(dictionary).map((key) => {
-                            arr.push({ key: key, name: dictionary[key] })
-                        })
-                        setRequests(arr);
+                const unsub = onSnapshot(doc(firestore, "users", user.uid), (qSnapshot) => {
+                    if (qSnapshot.exists()) {
+                        const dictionary = qSnapshot.data().friendRequestsReceived;
+                        
+                        if (dictionary) {
+                            const arr = [];
+                            Object.keys(dictionary).map((key) => {
+                                arr.push({ key: key, name: dictionary[key] });
+                            })
+                            setRequests(arr);
+                        }
+                    } else {
+                        console.log("Current user not found");
                     }
-                } else {
-                    console.log("Current user not found")
-                }
+                })
+                return () => unsub;
             } catch (error) {
-                console.error(error)
+                console.error(error);
             }
         }
 
@@ -68,6 +70,52 @@ const AddFriendComponent = () => {
         }
     }
 
+    const acceptRequest = async (e, friendId, friendName) => {
+        console.log(e);
+        const user = auth.currentUser;
+        const userRef = doc(firestore, "users", user.uid);
+        const friendRef = doc(firestore, "users", friendId);
+
+        try {
+            //update current user
+            await updateDoc(userRef, {
+                [`friends.${friendId}`]: friendName,
+                [`friendRequestsReceived.${friendId}`]: deleteField()
+            });
+
+            //update friend
+            await updateDoc(friendRef, {
+                [`friends.${user.uid}`]: friendName,
+                [`friendRequestsSent.${user.uid}`]: deleteField()
+            });
+        } catch (error) {
+            //error querying and updating
+            console.error(error);
+        }
+    }
+
+    const rejectRequest = async (e, friendId) => {
+        console.log(e);
+        const user = auth.currentUser;
+        const userRef = doc(firestore, "users", user.uid);
+        const friendRef = doc(firestore, "users", friendId);
+
+        try {
+            //update current user
+            await updateDoc(userRef, {
+                [`friendRequestsReceived.${friendId}`]: deleteField()
+            });
+
+            //update friend
+            await updateDoc(friendRef, {
+                [`friendRequestsSent.${user.uid}`]: deleteField()
+            });
+        } catch (error) {
+            //error querying and updating
+            console.error(error);
+        }
+    }
+
     return (
         <div>
             <div className="add-friend-div">
@@ -82,8 +130,8 @@ const AddFriendComponent = () => {
                     <li key={request.key}>
                         <span>{request.name}</span>
                         <div>
-                            <button className="accept-btn"> Accept </button>
-                            <button className="reject-btn"> Ignore </button>
+                            <button className="accept-btn" onClick={e => acceptRequest(e, request.key, request.name)}> Accept </button>
+                            <button className="reject-btn" onClick={e => rejectRequest(e, request.key)}> Ignore </button>
                         </div>
                     </li>
                 ))}
@@ -101,13 +149,16 @@ const ChatListComponent = () => {
         const fetchChats = async () => {
             const user = auth.currentUser;
             try {
-                const chatsQuerySnapshot = await getDocs(query(collection(firestore,"chats")));
+                const q = query(collection(firestore,"chats"), where(`participants.${user.uid}`, ">=", ""));
+                const chatsQuerySnapshot = await getDocs(q);
                 if (!chatsQuerySnapshot.empty && user) {
                     const arr = [];
                     chatsQuerySnapshot.docs.forEach((v) => {
-                        arr.push(v);
+                        const data = {...v.data(), id: v.id} ;
+                        arr.push(data);
                     });
                     setChats(arr);
+                    console.log(arr);
                 }
             } catch (error) {
                 console.error(error);
@@ -118,14 +169,14 @@ const ChatListComponent = () => {
 
     const setChat = (e) => {
         e.preventDefault();
-        
+        setSelectedChat(e.target.id);
     }
 
     return (
         <div className="chat-list-div">
             <ul>
                 {chats.map((chat) => (
-                    <li key={chat.id} onClick={setChat} className="list">
+                    <li key={chat.id} id= {chat.id} onClick={setChat} className="list">
                         {chat.name}
                     </li>
                 ))}
@@ -136,23 +187,22 @@ const ChatListComponent = () => {
 
 
 const MakeNewGroupChatComponent = () => {
-    const [friends, setFriends] = useState([]);
-    const [selected, setSelected] = useState([]);
+    const [friends, setFriends] = useState({});
+    const [selected, setSelected] = useState({});
 
     useEffect(() => {
+        const user = auth.currentUser;
+        setSelected({[user.uid]: user.displayName});
+
         const fetchFriends = async () => {
-            const user = auth.currentUser;
             try {
                 const docSnapshot = await getDoc(doc(firestore, "users", user.uid));
                 if (docSnapshot.exists()) {
                     const friendsList = docSnapshot.data().friends;
-                    const arr = [];
+
                     if (friendsList) {
-                        friendsList.forEach((i) => {
-                            arr.push(i);
-                        });
-                        setFriends(arr);
-                    } else {
+                        setFriends(friendsList);
+                    }else{
                         //no friends yet
                     }
                 }
@@ -163,44 +213,56 @@ const MakeNewGroupChatComponent = () => {
         fetchFriends();
     }, [])
 
-    const addToChat = (friend) => {
-        if (!selected.includes(friend)) {
-            setSelected([...selected, friend]);
+    const addToChat = (e) => {
+        const id = e.target.id;
+        if (!Object.hasOwn(selected, id)) {
+            setSelected({...selected, [id]: friends[id]});
         } else {
-            setSelected(selected.filter(u => u !== friend));
+            const newSelected = { ...selected };
+            // Using delete operator to remove 'city' property
+            delete newSelected[id];
+            setSelected(newSelected);
         }
     }
 
     const createGroupChat = async () => {
         var groupName = "";
-        if (selected.length === 1) {
-            groupName = selected[0];
+        if (Object.entries(selected).length === 1) {
+            groupName = Object.values(selected)[0];
         } else {
-            selected.forEach((i) => (
-                groupName += (i + " ")
-            ));
+            const valuesofObject = Object.values(selected);
+            for (let i = 0; i < 4; i++) {
+                groupName += valuesofObject[i];
+            }
         }
 
-        try {
-            const docRef = await addDoc(collection(firestore, "chats"), {
-                groupName: groupName,
-                participants: selected
-            });
-        } catch (error) {
-            console.error(error);
+        if (selected.length >= 1){
+            try {
+                const docRef = await addDoc(collection(firestore, "chats"), {
+                    groupName: groupName,
+                    participants: selected
+                });
+            } catch (error) {
+                console.error(error);
+            }
+        }else{
+            //TO DO: error message
         }
     }
+
     //TODO: key
     return (
         <div className="new-chat-div">
             <h2> Create new group chat</h2>
             <button onClick={createGroupChat}> Create </button>
             <ul>
-                {friends.map((friend) => (
-                    <li key={friend} onClick={addToChat} className="list">
-                        {friend} {selected.includes(friend) ? "(Selected)" : ""}
-                    </li>
-                ))}
+                {
+                    Object.keys(friends).map((friendKey) => (
+                        <li key={friendKey} id={friendKey} onClick={addToChat} className="list">
+                            {friends[friendKey]} {Object.hasOwn(selected, friendKey) ? "(Selected)" : ""}
+                        </li>
+                    ))
+                }
             </ul>
         </div>
     )
