@@ -158,7 +158,6 @@ const ChatListComponent = () => {
                         arr.push(data);
                     });
                     setChats(arr);
-                    console.log(arr);
                 }
             } catch (error) {
                 console.error(error);
@@ -219,7 +218,6 @@ const MakeNewGroupChatComponent = () => {
             setSelected({...selected, [id]: friends[id]});
         } else {
             const newSelected = { ...selected };
-            // Using delete operator to remove 'city' property
             delete newSelected[id];
             setSelected(newSelected);
         }

@@ -9,7 +9,7 @@ const Message = ({ message }) => {
             <div 
                 className="user-pic" style= {{backgroundImage: `url(${pic})`}}> </div>
             <div className="content"> 
-                <p className="user-name"> Person </p>
+                <p className="user-name"> {message.sender} </p>
                 <p className=""> {message.text} </p>
             </div>
         </div>
