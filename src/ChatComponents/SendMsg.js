@@ -1,21 +1,27 @@
-import React, { useEffect, useState } from "react"
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import React, { useContext, useState } from "react"
+import { addDoc, collection, doc, serverTimestamp } from "firebase/firestore";
 import { auth, firestore } from "../backend/firebase";
 import "../Styles/MainDisplay.css"
+import { MainContext } from "../Contexts/MainDisplayProvider";
 
 const SendMsg = ({scroll}) => {
     const [input, setInput] = useState("");
     const user = auth.currentUser;
+    const selectedChat = useContext(MainContext);
 
     const submit = async (e) => {
-        setInput("")
         e.preventDefault();
-        await addDoc(collection(firestore, "messages"), {
-            user: user.displayName,
-            text: input,
-            timestamp: serverTimestamp()
-        })
-        scroll.current.scrollIntoView({behavior: "smooth"})
+        if (selectedChat && input.length > 0) {
+            const docRef = doc(firestore, "chats", selectedChat);
+            const colRef = collection(docRef, "messages");
+            await addDoc(colRef, {
+                sender: user.displayName,
+                text: input,
+                timestamp: serverTimestamp()
+            })
+            scroll.current.scrollIntoView({ behavior: "smooth" });
+        }
+        setInput("");
     }
     
     return (
