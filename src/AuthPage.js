@@ -8,6 +8,7 @@ function AuthPage() {
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
     const [confirmPass, setConfirmPass] = useState("");
+    const [errormsg, SetErrorMsg] = useState("");
 
     const submitsignup = async (e) => {
       e.preventDefault();
@@ -31,11 +32,13 @@ function AuthPage() {
             // ...
           });
           console.log(user)
+          SetErrorMsg("");
           // ...
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
+          SetErrorMsg("Account with this email already exists or password is invalid");
           // ..
         });
       }else{
@@ -64,6 +67,7 @@ function AuthPage() {
         <input type="checkbox" id="chk" aria-hidden="true"/>
 
         <div className="signup">
+          {errormsg.length > 0 ? <p> {errormsg} </p> : <p> </p>}
             <form>
               <label htmlFor="chk" aria-hidden="true" className="authlabel"> Sign Up </label>
               <input type="text" name="user" placeholder="User name" 

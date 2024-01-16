@@ -1,8 +1,13 @@
 body{
     margin: 0;
     padding: 0;
+    height: 100vh;
     font-family: "Jost", sans-serif;
     background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+}
+
+p {
+    text-align: center;
 }
 
 #chk {

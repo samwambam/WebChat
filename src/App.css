@@ -8,6 +8,13 @@ p {
   color: aliceblue;
 }
 
+section {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

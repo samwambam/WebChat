@@ -176,7 +176,7 @@ const ChatListComponent = () => {
             <ul>
                 {chats.map((chat) => (
                     <li key={chat.id} id= {chat.id} onClick={setChat} className="list">
-                        {chat.name}
+                        {chat.groupName}
                     </li>
                 ))}
             </ul>
@@ -257,7 +257,7 @@ const MakeNewGroupChatComponent = () => {
                 {
                     Object.keys(friends).map((friendKey) => (
                         <li key={friendKey} id={friendKey} onClick={addToChat} className="list">
-                            {friends[friendKey]} {Object.hasOwn(selected, friendKey) ? "(Selected)" : ""}
+                            {friends[friendKey]} <input type="checkbox" id= {friendKey} className="chkbox" checked={Object.hasOwn(selected, friendKey) || false} onChange={addToChat}/>
                         </li>
                     ))
                 }
